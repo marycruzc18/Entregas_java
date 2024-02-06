@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -30,7 +30,7 @@ public class Ventas {
     private double precio;
 
     @Column
-    private Date fecha;
+    private LocalDateTime fecha;
 
     //Getters y Setters
 
@@ -75,11 +75,12 @@ public class Ventas {
         this.precio = precio;
     }
 
-    public Date getFecha() {
+    public LocalDateTime getFecha() {
         return fecha;
     }
 
-    public void setFecha(Date fecha) {
+    public void setFecha(LocalDateTime fecha) {
         this.fecha = fecha;
     }
-}
+    }
+

@@ -9,17 +9,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/cliente")
-public class Controller {
-
-
+public class ClienteController {
     @Autowired
     private ClienteRepository clienteRepository;
+
     @Autowired
     private ClienteService clienteService;
 
@@ -28,7 +25,7 @@ public class Controller {
         return "Conectado";
     }
 
-    //Muestar la información del cliente con la edad
+    //Muestra la información del cliente con la edad
 
     @GetMapping("/info")
     public ResponseEntity<?> obtenerInfoCliente() {
@@ -52,50 +49,40 @@ public class Controller {
 
 
     //Obtener todos los clientes
-    @GetMapping("clientes")
-    public ResponseEntity<?> getCliente() {
-        try {
-            List<Cliente> clientes = clienteRepository.findAll();
-            return new ResponseEntity<>(clientes, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>("Error interno al obtener clientes: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    @GetMapping("/clientes")
+    public ResponseEntity<List<Cliente>> obtenerTodosLosClientes(){
+        List<Cliente> clientes = clienteService.obtenerTodosClientes();
+        return ResponseEntity.ok(clientes);
     }
-
 
 
     //Guardar los clientes en la base de datos
-    @PostMapping("alta")
-    public String post(@RequestBody Cliente cliente) {
+    @PostMapping("/alta")
+    public ResponseEntity<String> guardarCliente(@RequestBody Cliente cliente) {
+        clienteService.guardarCliente(cliente);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Cliente guardado exitosamente");
+    }
+    //Modificar cliente
+    @PutMapping("/modificar/{id}")
+    public ResponseEntity<String> modificarCliente(@PathVariable Long id, @RequestBody Cliente cliente) {
         try {
-            clienteRepository.save(cliente);
-            return "Guardado";
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "Error al guardar: " + e.getMessage();
+            clienteService.modificarCliente(id, cliente);
+            return ResponseEntity.ok("Cliente actualizado exitosamente");
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
         }
     }
-   //Modificar cliente
-    @PutMapping("modificar/{id}")
-    public String update(@PathVariable Long id, @RequestBody Cliente cliente) {
-        Cliente updateCliente = clienteRepository.findById(id).get();
-        updateCliente.setNombre(cliente.getNombre());
-        updateCliente.setApellido(cliente.getApellido());
-        updateCliente.setFechaNacimiento(cliente.getFechaNacimiento());
-        clienteRepository.save(updateCliente);
-        return "Modificado";
-    }
-   //Eliminar clientes
-    @DeleteMapping("baja/{id}")
-    public String delete (@PathVariable Long id){
-        Cliente deleteCliente = clienteRepository.findById(id).get();
-        clienteRepository.delete(deleteCliente);
-        return "Eliminado";
-    }
 
+    //Eliminar clientes
+
+    @DeleteMapping("/eliminar/{id}")
+    public ResponseEntity<String> eliminarCliente(@PathVariable Long id) {
+        try {
+            clienteService.eliminarCliente(id);
+            return ResponseEntity.ok("Cliente eliminado exitosamente");
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
 }
-
-
-
-

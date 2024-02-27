@@ -14,75 +14,86 @@ import java.util.List;
 @RestController
 @RequestMapping("/cliente")
 public class ClienteController {
-    @Autowired
+    private ClienteService clienteService;
+
     private ClienteRepository clienteRepository;
 
     @Autowired
-    private ClienteService clienteService;
+    public ClienteController(ClienteService clienteService , ClienteRepository clienteRepository) {
+        this.clienteService = clienteService;
+        this.clienteRepository = clienteRepository;
+    }
 
     @GetMapping
     public String index(){
         return "Conectado";
     }
 
-    //Muestra la información del cliente con la edad
-
-    @GetMapping("/info")
-    public ResponseEntity<?> obtenerInfoCliente() {
-        try {
-            List<Cliente> clientes = clienteRepository.findAll();
-
-            if (!clientes.isEmpty()) {
-                for (Cliente cliente : clientes) {
-                    int edad = clienteService.calcularEdad(cliente.getFechaNacimiento());
-                    cliente.setEdad(edad);
-                }
-                return new ResponseEntity<>(clientes, HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>("No hay clientes en la base de datos", HttpStatus.NOT_FOUND);
-            }
-        } catch (Exception e) {
-            return new ResponseEntity<>("Error al obtener información de los clientes: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
 
 
     //Obtener todos los clientes
-    @GetMapping("/clientes")
+    @GetMapping("/todosclientes")
     public ResponseEntity<List<Cliente>> obtenerTodosLosClientes(){
         List<Cliente> clientes = clienteService.obtenerTodosClientes();
         return ResponseEntity.ok(clientes);
     }
 
+    //Buscar los clientes por ID
+    @GetMapping("/{id}")
+    public ResponseEntity<?> buscarClientePorId(@PathVariable Long id) {
+        try {
+            // Buscar el cliente por ID en la base de datos
+            Cliente cliente = clienteRepository.findById(id)
+                    .orElseThrow(() -> new EntityNotFoundException("Cliente no encontrado con ID: " + id));
 
-    //Guardar los clientes en la base de datos
-    @PostMapping("/alta")
-    public ResponseEntity<String> guardarCliente(@RequestBody Cliente cliente) {
+            // Devolver el cliente encontrado en la respuesta
+            return ResponseEntity.ok(cliente);
+        } catch (EntityNotFoundException e) {
+            // Manejar el caso donde no se encontró el cliente
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            // Manejar cualquier otro error inesperado
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al buscar el cliente: " + e.getMessage());
+        }
+    }
+
+
+//Guardar los clientes en la base de datos
+@PostMapping("/alta")
+public ResponseEntity<?> agregarCliente(@RequestBody Cliente cliente) {
+    try {
         clienteService.guardarCliente(cliente);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Cliente guardado exitosamente");
+        return new ResponseEntity<>("Cliente agregado correctamente", HttpStatus.CREATED);
+    } catch (Exception e) {
+        return new ResponseEntity<>("Error al agregar cliente: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
-    //Modificar cliente
-    @PutMapping("/modificar/{id}")
-    public ResponseEntity<String> modificarCliente(@PathVariable Long id, @RequestBody Cliente cliente) {
-        try {
-            clienteService.modificarCliente(id, cliente);
-            return ResponseEntity.ok("Cliente actualizado exitosamente");
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
+}
+
+
+
+
+//Modificar cliente
+@PutMapping("/modificar/{id}")
+public ResponseEntity<String> modificarCliente(@PathVariable Long id, @RequestBody Cliente cliente) {
+    try {
+        clienteService.modificarCliente(id, cliente);
+        return ResponseEntity.ok("Cliente actualizado exitosamente");
+    } catch (EntityNotFoundException e) {
+        return ResponseEntity.notFound().build();
+    }
+}
+
+//Eliminar clientes
+
+@DeleteMapping("/eliminar/{id}")
+public ResponseEntity<String> eliminarCliente(@PathVariable Long id) {
+    try {
+        clienteService.eliminarCliente(id);
+        return ResponseEntity.ok("Cliente eliminado exitosamente");
+    } catch (EntityNotFoundException e) {
+        return ResponseEntity.notFound().build();
     }
 
-    //Eliminar clientes
 
-    @DeleteMapping("/eliminar/{id}")
-    public ResponseEntity<String> eliminarCliente(@PathVariable Long id) {
-        try {
-            clienteService.eliminarCliente(id);
-            return ResponseEntity.ok("Cliente eliminado exitosamente");
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
+}
 }

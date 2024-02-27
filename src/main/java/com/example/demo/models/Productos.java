@@ -26,6 +26,8 @@ public class Productos {
     @Column
     private double precio;
 
+
+
     //se crean los getters y setters
 
     public Productos() {
@@ -37,6 +39,7 @@ public class Productos {
         this.codigo = codigo;
         this.stock = stock;
         this.precio = precio;
+
     }
 
     // Getters y setters
@@ -81,6 +84,9 @@ public class Productos {
         this.precio = precio;
     }
 
+
+
+
     @Override
     public String toString() {
         return "Productos{" +
@@ -91,5 +97,6 @@ public class Productos {
                 ", precio=" + precio +
                 '}';
     }
+
 
 }

@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.Period;
 
 @Getter
 @Setter
@@ -29,8 +30,11 @@ public class Cliente {
 
     private LocalDate fechaNacimiento;
 
-    @Transient
-    private int edad;
+    // Método para calcular la edad
+    public int getEdad() {
+        LocalDate currentDate = LocalDate.now();
+        return Period.between(this.fechaNacimiento, currentDate).getYears();
+    }
 
     // Constructor sin argumentos necesario para JPA
     public Cliente() {
@@ -40,12 +44,40 @@ public class Cliente {
         this.nombre = nombre;
         this.apellido = apellido;
         this.fechaNacimiento = fechaNacimiento;
-        this.edad = calcularEdad();
+
     }
 
-
-    // Método para calcular la edad
-    private int calcularEdad() {
-        return LocalDate.now().getYear() - fechaNacimiento.getYear();
+    public Long getId() {
+        return id;
     }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getApellido() {
+        return apellido;
+    }
+
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
+    }
+
+    public LocalDate getFechaNacimiento() {
+        return fechaNacimiento;
+    }
+
+    public void setFechaNacimiento(LocalDate fechaNacimiento) {
+        this.fechaNacimiento = fechaNacimiento;
+    }
+
 }
+

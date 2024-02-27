@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/productos")
@@ -22,6 +23,17 @@ public class ProductosController {
     public ResponseEntity<List<Productos>> getProductos() {
         List<Productos> productos = productosService.obtenerTodosProductos();
         return ResponseEntity.ok(productos);
+    }
+
+   //Buscar productos por ID
+    @GetMapping("/{id}")
+    public ResponseEntity<?> buscarProductoPorId(@PathVariable Long id) {
+        Optional<Productos> productoOptional = productosService.buscarProductosPorId(id);
+        if (productoOptional.isPresent()) {
+            return ResponseEntity.ok(productoOptional.get());
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Producto no encontrado con ID: " + id);
+        }
     }
 
     //Guardar los productos en la base de datos

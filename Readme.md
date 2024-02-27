@@ -1,46 +1,44 @@
-##Ventas APIRest 
+## Ventas API Rest
 
-Implementación de SpringBoot con JPA
+Implementación de SpringBoot con JPA para gestionar ventas, clientes y productos.
 
-###Dependencias
+### Dependencias
 
--Spring Web
--Spring data JPA 
--Lombok
--MySQL Driver 
+- Spring Web
+- Spring Data JPA
+- Lombok
+- MySQL Driver 
 
-##Routes 
+### Endpoints
 
-###Cliente
+### Cliente
 
--post: http://localhost:8080/cliente/alta
--get: http://localhost:8080/cliente/todosclientes
--get: http://localhost:8080/cliente/id
--put: http://localhost:8080/cliente/modificar/id
--delete: http://localhost:8080/cliente/eliminar/id 
+- **POST**: [http://localhost:8080/cliente/alta](http://localhost:8080/cliente/alta) - Alta de un cliente
+- **GET**: [http://localhost:8080/cliente/todosclientes](http://localhost:8080/cliente/todosclientes) - Obtener todos los clientes
+- **GET**: [http://localhost:8080/cliente/id](http://localhost:8080/cliente/id) - Obtener un cliente por su ID
+- **PUT**: [http://localhost:8080/cliente/modificar/id](http://localhost:8080/cliente/modificar/id) - Modificar un cliente por su ID
+- **DELETE**: [http://localhost:8080/cliente/eliminar/id](http://localhost:8080/cliente/eliminar/id) - Eliminar un cliente por su ID
 
-###Productos 
+#### Productos
 
--post:http://localhost:8080/productos/altaproductos
--get:http://localhost:8080/productos/productos
--get: http://localhost:8080/productos/id
--put:http://localhost:8080/productos/modificarproductos/id
--delete: http://localhost:8080/productos/bajaproductos/id
+- **POST**: [http://localhost:8080/productos/altaproductos](http://localhost:8080/productos/altaproductos) - Alta de un producto
+- **GET**: [http://localhost:8080/productos/productos](http://localhost:8080/productos/productos) - Obtener todos los productos
+- **GET**: [http://localhost:8080/productos/id](http://localhost:8080/productos/id) - Obtener un producto por su ID
+- **PUT**: [http://localhost:8080/productos/modificarproductos/id](http://localhost:8080/productos/modificarproductos/id) - Modificar un producto por su ID
+- **DELETE**: [http://localhost:8080/productos/bajaproductos/id](http://localhost:8080/productos/bajaproductos/id) - Eliminar un producto por su ID
 
-###Ventas 
+#### Ventas
 
--post: http://localhost:8080/ventas/crear
--get: http://localhost:8080/ventas/todos
--get: http://localhost:8080/ventas/id 
--get: http://localhost:8080/ventas/id/comprobante
--delete: http://localhost:8080/ventas/id
+- **POST**: [http://localhost:8080/ventas/crear](http://localhost:8080/ventas/crear) - Crear una venta
+- **GET**: [http://localhost:8080/ventas/todos](http://localhost:8080/ventas/todos) - Obtener todas las ventas
+- **GET**: [http://localhost:8080/ventas/id](http://localhost:8080/ventas/id) - Obtener una venta por su ID
+- **GET**: [http://localhost:8080/ventas/id/comprobante](http://localhost:8080/ventas/id/comprobante) - Obtener el comprobante de una venta por su ID
+- **DELETE**: [http://localhost:8080/ventas/id](http://localhost:8080/ventas/id) - Eliminar una venta por su ID
 
-###Swagger
+### Documentación
 
--http://localhost:8080/swagger-ui/index.html
+- Swagger UI: [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
 
+### Postman
 
-###Postman 
-
--Postman scripts
-
+- Colección de Postman y scripts disponibles.
